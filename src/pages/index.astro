@@ -1,0 +1,100 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import BlogList from "../components/BlogList.astro";
+import userData from "../data/userData";
+
+const posts = (await getCollection("blog"))
+    .map((post) => ({
+        slug: post.data.slug,
+        title: post.data.title,
+        date: post.data.date.toISOString().slice(0, 10),
+    }))
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+
+const featured = userData.projects.slice(0, 2);
+---
+
+<BaseLayout>
+    {/* Hero */}
+    <section class="hero">
+        <div class="glow" aria-hidden="true"></div>
+        <span class="badge">{userData.designation}</span>
+        <h1>
+            I solve the support cases other people get <span class="gradient">stuck on.</span>
+        </h1>
+        <p class="lede">{userData.hero.description}</p>
+        <div class="actions">
+            <a class="btn-primary" href="/projects">View projects</a>
+            <a class="btn-outline" href={userData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a class="btn-outline" href={userData.socialLinks.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+    </section>
+
+    {/* Featured Projects */}
+    <section>
+        <SectionHeading
+            title="Featured Projects"
+            description="Things I have built to make support work better, plus earlier web projects."
+        />
+        <div class="grid grid-2">
+            {featured.map((project) => <ProjectCard {...project} />)}
+        </div>
+        <div class="more-link">
+            <a href="/projects">View all projects →</a>
+        </div>
+    </section>
+
+    {/* Experience */}
+    <section class="section">
+        <SectionHeading
+            title="Experience"
+            description="Support roles across fintech, call tracking SaaS, and high-volume customer service."
+        />
+        <div class="experience-list">
+            {
+                userData.experience.map((job) => (
+                    <article>
+                        <p class="company">{job.company}</p>
+                        <h3>{job.role}</h3>
+                        <p class="role-title">{job.title}</p>
+                        <p class="job-desc">{job.description}</p>
+                    </article>
+                ))
+            }
+        </div>
+    </section>
+
+    {/* Skills */}
+    <section class="section">
+        <SectionHeading
+            title="Skills"
+            description="Support engineering first, with data engineering training and web development alongside."
+        />
+        <div class="skills-grid">
+            {
+                userData.skills.map((group) => (
+                    <div class="skill-card">
+                        <h3>{group.group}</h3>
+                        <ul>
+                            {group.items.map((item) => (
+                                <li>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
+    </section>
+
+    {/* Latest Blogs */}
+    <section class="section">
+        <SectionHeading title="Latest Blogs" />
+        <BlogList posts={posts} limit={3} />
+        <div class="more-link">
+            <a href="/blog">Read More →</a>
+        </div>
+    </section>
+</BaseLayout>

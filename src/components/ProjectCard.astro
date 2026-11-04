@@ -1,0 +1,54 @@
+---
+interface Props {
+    title: string;
+    description?: string;
+    imgUrl?: string;
+    link?: string;
+    github?: string;
+    tags?: string[];
+}
+
+const { title, description, imgUrl, link, github, tags } = Astro.props;
+const hasFooter = Boolean(link || github);
+---
+
+<article class="card">
+    {
+        imgUrl && (
+            <div class="thumb">
+                <img src={imgUrl} alt={title} loading="lazy" />
+            </div>
+        )
+    }
+    <div class="body">
+        <div class={hasFooter ? "card-main" : undefined}>
+            <h3>{title}</h3>
+            <p class="desc">{description}</p>
+            {
+                tags && tags.length > 0 && (
+                    <div class="tags">
+                        {tags.map((tag) => (
+                            <span>{tag}</span>
+                        ))}
+                    </div>
+                )
+            }
+        </div>
+        {
+            hasFooter && (
+                <div class="card-footer">
+                    {link && (
+                        <a href={link} target="_blank" rel="noopener noreferrer">
+                            Demo <span aria-hidden="true">↗</span>
+                        </a>
+                    )}
+                    {github && (
+                        <a class="code" href={github} target="_blank" rel="noopener noreferrer">
+                            Code <span aria-hidden="true">↗</span>
+                        </a>
+                    )}
+                </div>
+            )
+        }
+    </div>
+</article>

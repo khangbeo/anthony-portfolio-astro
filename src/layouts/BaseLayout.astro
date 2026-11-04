@@ -1,0 +1,85 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Socials from "../components/Socials.astro";
+import userData from "../data/userData";
+import "../styles/global.css";
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title = "Anthony Duong - Support Engineer",
+    description = "Support Engineer with a background in art and design, passionate about AI training and creative problem-solving.",
+} = Astro.props;
+
+const nav = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Projects", href: "/projects" },
+    { name: "Blog", href: "/blog" },
+    { name: "Contact", href: "/contact" },
+];
+
+const currentPath = Astro.url.pathname;
+const isCurrent = (href: string) =>
+    href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Anthony Duong" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        {/* ClientRouter: Astro's built-in view transitions — page switches crossfade */}
+        <ClientRouter />
+    </head>
+    <body>
+        <div class="site-shell">
+            <div class="container">
+                <header class="site-header">
+                    <h1>Anthony Duong</h1>
+                    <p class="designation">{userData.designation}</p>
+                    <Socials />
+                    <hr />
+                    <nav class="main-nav">
+                        {
+                            nav.map((item) => (
+                                <a
+                                    href={item.href}
+                                    aria-current={isCurrent(item.href) ? "page" : undefined}
+                                >
+                                    {item.name}
+                                </a>
+                            ))
+                        }
+                    </nav>
+                </header>
+            </div>
+            <main class="site-main">
+                <div class="container">
+                    <slot />
+                </div>
+            </main>
+            <footer class="site-footer">
+                <div class="container inner">
+                    <Socials />
+                    <p>&copy; {year} Anthony Duong. Bakersfield, California.</p>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>

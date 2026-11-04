@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import userData from "../data/userData";
+
+// The Next.js About page shows Font Awesome brand icons for these;
+// here they are plain text chips (no icon library in this lean prototype).
+const comfortableWith = ["JavaScript", "HTML5", "CSS3", "React", "Node.js", "Bootstrap"];
+---
+
+<BaseLayout title="About">
+    <section class="about-wrap">
+        {userData.about.description.map((desc) => <p class="about-desc">{desc}</p>)}
+
+        <div class="about-block">
+            <h2>Currently working on</h2>
+            <a
+                class="pill-link"
+                href={userData.about.currentProjectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                {userData.about.currentProject}
+            </a>
+        </div>
+
+        <div class="about-block">
+            <h2>Comfortable With</h2>
+            <div class="comfortable-list">
+                {comfortableWith.map((name) => <span>{name}</span>)}
+            </div>
+        </div>
+    </section>
+</BaseLayout>

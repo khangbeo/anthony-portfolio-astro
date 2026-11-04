@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import userData from "../data/userData";
+---
+
+<BaseLayout title="Contact">
+    <section>
+        <div class="page-title">
+            <h1>Let's chat</h1>
+            <p>Message me and I'll get back to you as soon as I can.</p>
+        </div>
+
+        {/*
+          The Next.js version validates this form in React and posts to a stub
+          /api/contact route that only logs the submission (nothing is sent).
+          A static site has no API route, so this prototype submits via mailto,
+          matching what the current form effectively does for a visitor.
+        */}
+        <form class="contact-form" id="contact-form">
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required placeholder="John Doe" />
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="john@example.com" />
+            </div>
+            <div>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required rows="5" placeholder="Your message here..."></textarea>
+            </div>
+            <button type="submit">Send Message</button>
+            <p class="form-note">
+                Prefer email? Reach me at <a class="back-link" href={`mailto:${userData.email}`}>{userData.email}</a>
+            </p>
+        </form>
+    </section>
+
+    <script>
+        const form = document.getElementById("contact-form");
+        form?.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const data = new FormData(form);
+            const name = data.get("name");
+            const email = data.get("email");
+            const message = data.get("message");
+            const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+            const body = encodeURIComponent(`${message}\n\nFrom: ${name} (${email})`);
+            window.location.href = `mailto:khangbeo2012@gmail.com?subject=${subject}&body=${body}`;
+        });
+    </script>
+</BaseLayout>

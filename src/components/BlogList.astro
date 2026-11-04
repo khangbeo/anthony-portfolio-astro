@@ -1,0 +1,26 @@
+---
+interface Post {
+    slug: string;
+    title: string;
+    date: string;
+}
+
+interface Props {
+    posts: Post[];
+    limit?: number;
+}
+
+const { posts, limit } = Astro.props;
+const visible = limit ? posts.slice(0, limit) : posts;
+---
+
+<div class="blog-list">
+    {
+        visible.map((post) => (
+            <a class="blog-row" href={`/blog/${post.slug}`}>
+                <span class="post-title">{post.title}</span>
+                <time datetime={post.date}>{post.date}</time>
+            </a>
+        ))
+    }
+</div>

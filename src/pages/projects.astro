@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import userData from "../data/userData";
+---
+
+<BaseLayout title="Projects">
+    <SectionHeading title="Projects" />
+    <div class="grid grid-3">
+        {userData.projects.map((project) => <ProjectCard {...project} />)}
+    </div>
+</BaseLayout>
